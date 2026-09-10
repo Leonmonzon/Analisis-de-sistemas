@@ -34,3 +34,21 @@
 | Código | Nombre | Descripción | Contenido |
 |---|---|---|---|
 | D2 | Credenciales | Almacena usuario y contraseña de los profesores para validar el inicio de sesión | ID profesor, usuario, contraseña (hash) |
+
+## Datos Primitivos 
+
+Usuario = varchar
+
+Contraseña = varchar
+
+Resultado = bool
+
+ID profesor = int
+
+ID sesión = int
+
+Fecha/hora = date
+
+Estado = varchar
+
+Activo = bool
