@@ -34,3 +34,21 @@
 | Código | Nombre | Descripción | Contenido |
 |---|---|---|---|
 | D3 | Materias | Almacena las materias registradas en el sistema | ID materia, nombre, código, profesor a cargo, estado |
+
+## Datos Primitivos
+
+Nombre = varchar
+
+Código = varchar
+
+Descripción = varchar
+
+Profesor a cargo = int
+
+Resultado = bool
+
+ID materia = int
+
+Fecha de alta = date
+
+Estado = varchar
