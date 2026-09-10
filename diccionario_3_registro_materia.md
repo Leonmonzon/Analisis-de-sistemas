@@ -1,83 +1,45 @@
-
-# Diccionario de datos — Sistema
+# Diccionario de datos — Proceso Registrar Materia
 
 ## Entidad externa
 
-| Entidad  | Descripción                                                                                                                          |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| PROFESOR | Envía datos para registrarse, iniciar sesión, registrar materias y dar de alta materias. Recibe las confirmaciones correspondientes. |
+| Entidad  | Descripción                                                                           |
+| -------- | ------------------------------------------------------------------------------------- |
+| PROFESOR | Envía los datos de la nueva materia y recibe la confirmación de que quedó registrada. |
 
 ## Procesos
 
-| Código | Nombre                   | Descripción                                               | Entradas             | Salidas                                       |
-| ------ | ------------------------ | --------------------------------------------------------- | -------------------- | --------------------------------------------- |
-| 1.1.1  | Registrar Profesor       | Registra los datos del profesor en el sistema             | DATOS_PROFESOR       | PROFESOR_REGISTRADO                           |
-| 1.2.1  | Validar Inicio de Sesión | Verifica las credenciales ingresadas por el profesor      | DATOS_INICIO_SESION  | CREDENCIALES_VALIDAS / CREDENCIALES_INVALIDAS |
-| 1.2.2  | Crear Sesión             | Crea una sesión para el profesor con credenciales válidas | CREDENCIALES_VALIDAS | SESION_INICIADA                               |
-| 1.3.1  | Registrar Materia        | Registra una nueva materia en el sistema                  | DATOS_MATERIA        | MATERIA_REGISTRADA                            |
-| 1.3.2  | Dar de Alta Materia      | Da de alta una materia previamente registrada             | DATOS_ALTA_MATERIA   | ALTA_MATERIA_REGISTRADA                       |
+| Código | Nombre            | Descripción                                           | Entradas      | Salidas            |
+| ------ | ----------------- | ----------------------------------------------------- | ------------- | ------------------ |
+| 1.3.1  | Registrar Materia | Registra los datos de una nueva materia en el sistema | Datos.materia | Materia.registrada |
 
 ## Flujos de datos
 
-| Nombre                   | Descripción                      | Origen                         | Destino                        | Composición                                   |
-| ------------------------ | -------------------------------- | ------------------------------ | ------------------------------ | --------------------------------------------- |
-| DATOS_PROFESOR           | Datos ingresados por el profesor | PROFESOR                       | 1.1.1 Registrar Profesor       | Nombre, apellido, DNI, email, contraseña      |
-| PROFESOR_REGISTRADO      | Confirmación del registro        | 1.1.1 Registrar Profesor       | D1 Profesores                  | ID profesor, datos profesor                   |
-| CONFIRMACION_REGISTRO    | Confirmación del registro        | D1 Profesores                  | PROFESOR                       | Estado, fecha                                 |
-| DATOS_INICIO_SESION      | Datos para iniciar sesión        | PROFESOR                       | 1.2.1 Validar Inicio de Sesión | Usuario, contraseña                           |
-| CREDENCIALES_VALIDAS     | Credenciales correctas           | 1.2.1 Validar Inicio de Sesión | 1.2.2 Crear Sesión             | Usuario, resultado                            |
-| CREDENCIALES_INVALIDAS   | Credenciales incorrectas         | 1.2.1 Validar Inicio de Sesión | PROFESOR                       | Resultado                                     |
-| SESION_INICIADA          | Confirmación de sesión           | 1.2.2 Crear Sesión             | D1 Cuentas                     | ID sesión, usuario, fecha/hora                |
-| DATOS_MATERIA            | Datos de la materia              | PROFESOR                       | 1.3.1 Registrar Materia        | Nombre, código, descripción, profesor a cargo |
-| MATERIA_REGISTRADA       | Confirmación de registro         | 1.3.1 Registrar Materia        | D1 Materias                    | ID materia, nombre, código                    |
-| CONFIRMACION_REGISTRO    | Confirmación del registro        | D1 Materias                    | PROFESOR                       | Estado, fecha                                 |
-| DATOS_ALTA_MATERIA       | Datos para dar de alta           | PROFESOR                       | 1.3.2 Dar de Alta Materia      | ID materia, código                            |
-| ALTA_MATERIA_REGISTRADA  | Confirmación del alta            | 1.3.2 Dar de Alta Materia      | D1 Materias                    | ID materia, estado                            |
-| CONFIRMACION_ALTA_VALIDA | Confirmación del alta            | D1 Materias                    | PROFESOR                       | Estado, fecha                                 |
+| Nombre                | Descripción                                                              | Origen                  | Destino                 | Composición                                            |
+| --------------------- | ------------------------------------------------------------------------ | ----------------------- | ----------------------- | ------------------------------------------------------ |
+| Datos.materia         | Datos ingresados por el profesor para registrar una nueva materia        | PROFESOR                | 1.3.1 Registrar Materia | Código materia, nombre, descripción, año, cuatrimestre |
+| Materia.registrada    | Datos de la materia que fueron registrados correctamente                 | 1.3.1 Registrar Materia | D1 Materias             | = Datos.materia                                        |
+| Confirmación.registro | Confirmación enviada al profesor indicando que la materia fue registrada | D1 Materias             | PROFESOR                | Código materia, nombre, estado, fecha de registro      |
 
-# Datos primitivos
+## Almacenes de datos
 
-* **Nombre** = `varchar`
-* **Apellido** = `varchar`
-* **DNI** = `int`
-* **Email** = `varchar`
-* **Contraseña** = `varchar`
-* **ID profesor** = `int`
-* **Estado** = `varchar`
-* **Fecha** = `date`
-* **Usuario** = `varchar`
-* **Resultado** = `bool`
-* **ID sesión** = `int`
-* **Fecha/hora** = `date`
-* **ID materia** = `int`
-* **Código** = `varchar`
-* **Descripción** = `varchar`
-* **Profesor a cargo** = `int`
+| Código | Nombre   | Descripción                                                  | Contenido                                                                         |
+| ------ | -------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| D1     | Materias | Almacena los datos de las materias registradas en el sistema | Código materia, nombre, descripción, año, cuatrimestre, estado, fecha de registro |
 
-### Almacenes de datos
+## Datos Primitivos
 
-**D1 Profesores**
+**Código materia** = varchar
 
-* ID profesor = `int`
-* Nombre = `varchar`
-* Apellido = `varchar`
-* DNI = `int`
-* Email = `varchar`
-* Contraseña = `varchar`
+**Nombre** = varchar
 
-**D2 Cuentas**
+**Descripción** = varchar
 
-* ID sesión = `int`
-* ID profesor = `int`
-* Usuario = `varchar`
-* Estado = `varchar`
-* Fecha/hora = `date`
+**Año** = int
 
-**D3 Materias**
+**Cuatrimestre** = int
 
-* ID materia = `int`
-* Nombre = `varchar`
-* Código = `varchar`
-* Descripción = `varchar`
-* Profesor a cargo = `int`
-* Estado = `varchar`
+**Estado** = varchar
+
+**Fecha de registro** = date
+
+---
