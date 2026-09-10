@@ -30,3 +30,13 @@
 | Código | Nombre | Descripción | Contenido |
 |---|---|---|---|
 | D1 | Solicitudes | Almacena las solicitudes de registro de los profesores | ID solicitud, datos del profesor, estado, fecha |
+
+## Datos Primitivos
+
+Nombre = varchar
+Apellido = varchar
+DNI = int
+Email = varchar
+Contraseña = varchar
+ID solicitud = int
+Fecha = date
