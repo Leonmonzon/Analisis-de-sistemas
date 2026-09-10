@@ -34,9 +34,15 @@
 ## Datos Primitivos
 
 Nombre = varchar
+
 Apellido = varchar
+
 DNI = int
+
 Email = varchar
+
 Contraseña = varchar
+
 ID solicitud = int
+
 Fecha = date
