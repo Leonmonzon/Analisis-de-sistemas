@@ -42,7 +42,52 @@ DNI = int
 Email = varchar
 
 Contraseña = varchar
+# Diccionario de datos — Proceso Registración
 
+## Entidad externa
+
+| Entidad | Descripción |
+|---|---|
+| PROFESOR | Envía sus datos de registro y recibe el estado de su solicitud o la notificación de error. |
+
+## Procesos
+
+| Código | Nombre | Descripción | Entradas | Salidas |
+|---|---|---|---|---|
+| 0 | Sistema | Proceso general que agrupa la interacción entre PROFESOR y el sistema | Datos | Respuestas |
+| 1 | Registración | Registra la solicitud de un profesor en el sistema | Datos.registro | Estado.solicitud pendiente, Datos inválidos |
+| 1.1 | Validar datos | Verifica que los datos de registro ingresados sean correctos y estén completos | Datos.registro | Datos validados, Datos inválidos |
+| 1.2 | Registrar solicitud | Guarda la solicitud validada en el almacén de solicitudes | Datos validados | Solicitud registrada, Datos validados (a D1) |
+| 1.3 | Generar estado | Genera el estado de la solicitud para informar al profesor | Solicitud registrada | Estado.solicitud pendiente |
+
+## Flujos de datos
+
+| Nombre | Descripción | Origen | Destino | Composición |
+|---|---|---|---|---|
+| Datos.registro | Datos ingresados por el profesor para solicitar su registro | PROFESOR | 1.1 Validar datos | Nombre, Apellido, DNI, Email, Contraseña |
+| Datos validados | Datos de registro que superaron la validación | 1.1 Validar datos | 1.2 Registrar solicitud, D1 Solicitudes | = Datos.registro |
+| Datos inválidos | Mensaje de rechazo enviado al profesor cuando los datos ingresados son incorrectos o están incompletos | 1.1 Validar datos | PROFESOR | Mensaje_Error = "Datos inválidos" |
+| Solicitud registrada | Confirmación interna de que la solicitud quedó guardada | 1.2 Registrar solicitud | 1.3 Generar estado | ID solicitud, Fecha |
+| Estado.solicitud pendiente | Confirmación al profesor de que su solicitud quedó pendiente de aprobación | 1.3 Generar estado | PROFESOR | Estado = "pendiente", Fecha |
+
+## Almacenes de datos
+
+| Código | Nombre | Descripción | Contenido |
+|---|---|---|---|
+| D1 | Solicitudes | Almacena las solicitudes de registro de los profesores | ID solicitud, Datos del profesor, Estado, Fecha |
+
+## Datos Primitivos
+
+| Nombre de Dato | Tipo de Dato |
+|---|---|
+| Nombre | Varchar |
+| Apellido | Varchar |
+| DNI | Int |
+| Email | Varchar |
+| Contraseña | Varchar |
+| ID solicitud | Int |
+| Fecha | Date |
+| Estado | Varchar |
 ID solicitud = int
 
 Fecha = date
